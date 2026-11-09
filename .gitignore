@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+
+# Outils
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# Données MNIST et modèles entraînés (générés localement)
+data/
+*.pt
+*.pth
+
+# Secrets locaux
+.env
+.env.*
+!.env.example
+
+# Fichiers temporaires d'éditeur
+.vscode/
+.idea/
