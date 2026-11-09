@@ -31,12 +31,12 @@ pip install -r requirements.txt
 python train.py
 ```
 
-MNIST est téléchargé automatiquement dans `data/`. Le script entraîne un petit réseau convolutif pendant cinq époques, affiche la perte et la précision sur les données de test, puis sauvegarde les poids dans `mnist_cnn.pt`.
+MNIST est téléchargé automatiquement dans `data/`. Le script entraîne un réseau entièrement connecté pendant cinq époques, affiche la perte et la précision sur les données de test, puis sauvegarde les poids dans `mnist_mlp.pt`.
 
 Tu peux modifier le nombre d'époques et le chemin de sortie :
 
 ```bash
-python train.py --epochs 3 --output modeles/mnist_cnn.pt
+python train.py --epochs 3 --output modeles/mnist_mlp.pt
 ```
 
 ## Prédire un chiffre
@@ -48,14 +48,14 @@ python predict.py chemin/vers/mon_chiffre.png
 Pour un modèle enregistré ailleurs :
 
 ```bash
-python predict.py mon_chiffre.png --model modeles/mnist_cnn.pt
+python predict.py mon_chiffre.png --model modeles/mnist_mlp.pt
 ```
 
 L'image doit contenir un seul chiffre, assez grand et centré. Le modèle a été entraîné sur des images MNIST en niveaux de gris de 28 × 28 pixels, avec le chiffre clair sur fond sombre. Le script tente d'inverser automatiquement une image au fond clair. La prédiction affiche le chiffre choisi et les trois hypothèses les plus probables.
 
 ## Architecture
 
-Le modèle utilise deux couches convolutives avec ReLU et max pooling, puis deux couches entièrement connectées. Il est entraîné avec Adam et la perte `CrossEntropyLoss`. Le code choisit CUDA si disponible, sinon le processeur.
+L'image de 28 × 28 pixels est aplatie en un vecteur de 784 valeurs. Le réseau applique ensuite trois couches de calcul : `784 → 128 → 64 → 10`, avec ReLU après chacune des deux couches cachées. Les dix valeurs de sortie sont les scores des chiffres. Le modèle est entraîné avec Adam et la perte `CrossEntropyLoss`. Le code choisit CUDA si disponible, sinon le processeur.
 
 ## Structure du projet
 

@@ -1,4 +1,4 @@
-"""Entraîne un petit CNN sur MNIST et sauvegarde le modèle."""
+"""Entraîne un réseau entièrement connecté sur MNIST et sauvegarde le modèle."""
 
 import argparse
 from pathlib import Path
@@ -9,34 +9,27 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
 
-class DigitCNN(nn.Module):
+class DigitMLP(nn.Module):
     def __init__(self):
         super().__init__()
-        self.features = nn.Sequential(
-            nn.Conv2d(1, 32, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2),
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2),
-        )
-        self.classifier = nn.Sequential(
+        self.network = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(64 * 7 * 7, 128),
+            nn.Linear(28 * 28, 128),
             nn.ReLU(),
-            nn.Dropout(0.25),
-            nn.Linear(128, 10),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 10),
         )
 
     def forward(self, x):
-        return self.classifier(self.features(x))
+        return self.network(x)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--batch-size", type=int, default=128)
-    parser.add_argument("--output", type=Path, default=Path("mnist_cnn.pt"))
+    parser.add_argument("--output", type=Path, default=Path("mnist_mlp.pt"))
     args = parser.parse_args()
 
     torch.manual_seed(42)
@@ -50,7 +43,7 @@ def main():
     train_loader = DataLoader(train_data, batch_size=args.batch_size, shuffle=True)
     test_loader = DataLoader(test_data, batch_size=1000)
 
-    model = DigitCNN().to(device)
+    model = DigitMLP().to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     loss_fn = nn.CrossEntropyLoss()
 

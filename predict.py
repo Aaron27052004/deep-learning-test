@@ -6,7 +6,7 @@ import torch
 from PIL import Image, ImageOps
 from torchvision import transforms
 
-from train import DigitCNN
+from train import DigitMLP
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = DigitCNN().to(device)
+    model = DigitMLP().to(device)
     model.load_state_dict(torch.load(args.model, map_location=device, weights_only=True))
     model.eval()
 
